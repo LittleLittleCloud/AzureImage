@@ -10,7 +10,7 @@ namespace AzureImage.Model
     public class LabelMapping : CustomMappingFactory<LabelMappingInput, LabelMappingOutput>
     {
         public static string[] Label { get; set; } = new string[] { "cloudy", "rain", "shine", "Sunrise", };
-        // This is the custom mapping. We now separate it into a method, so that we can use it both in training and in loading.
+        // Custom mapping to determine the label with the highest probability
         public static void Mapping(LabelMappingInput input, LabelMappingOutput output)
         {
             var values = input.output1.GetValues().ToArray();
@@ -25,7 +25,7 @@ namespace AzureImage.Model
             var maxValueIndex = Array.IndexOf(output.score, maxValue);
             output.label = Label[maxValueIndex];
         }
-        // This factory method will be called when loading the model to get the mapping operation.
+        // Factory method called when loading the model to get the mapping operation
         public override Action<LabelMappingInput, LabelMappingOutput> GetMapping()
         {
             return Mapping;
